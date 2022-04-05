@@ -8,6 +8,12 @@ namespace DontWreckMyHouse.UI
 {
     public class View
     {
+        private readonly ConsoleIO io;
+
+        public View(ConsoleIO io)
+        {
+            this.io = io;
+        }
         public MainMenuOption SelectMainMenuOption()
         {
             DisplayHeader("Main Menu");
@@ -17,6 +23,13 @@ namespace DontWreckMyHouse.UI
 
             string message = $"Select [{min}-{max - 1}]: ";
             return options[io.ReadInt(message, min, max)];
+        }
+
+        public void DisplayHeader(string message)
+        {
+            io.PrintLine("");
+            io.PrintLine(message);
+            io.PrintLine(new string('=', message.Length));
         }
     }
 }

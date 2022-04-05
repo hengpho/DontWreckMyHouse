@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.UI", "DontWreckMyHouse.UI.csproj", "{1235C1EB-F95E-4AC7-9D2A-E6B5917C0F98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontWreckMyHouse.UI", "DontWreckMyHouse.UI.csproj", "{1235C1EB-F95E-4AC7-9D2A-E6B5917C0F98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.DAL", "..\DontWreckMyHouse.DAL\DontWreckMyHouse.DAL.csproj", "{380BC333-FB60-441B-8ED3-8F1C4D0A16FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontWreckMyHouse.DAL", "..\DontWreckMyHouse.DAL\DontWreckMyHouse.DAL.csproj", "{380BC333-FB60-441B-8ED3-8F1C4D0A16FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.BLL", "..\DontWreckMyHouse.BLL\DontWreckMyHouse.BLL.csproj", "{7CF987FD-B25C-49F1-9ED1-32BD709F8276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontWreckMyHouse.Core", "..\DontWreckMyHouse.Core\DontWreckMyHouse.Core.csproj", "{03F21A11-F52D-4E74-A130-3F4CEB017326}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.Core", "..\DontWreckMyHouse.Core\DontWreckMyHouse.Core.csproj", "{03F21A11-F52D-4E74-A130-3F4CEB017326}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontWreckMyHouse.BLL.Tests", "..\DontWreckMyHouse.BLL.Tests\DontWreckMyHouse.BLL.Tests.csproj", "{994D7F11-A4BC-4B20-AAAA-CD399CCBA6ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.BLL.Tests", "..\DontWreckMyHouse.BLL.Tests\DontWreckMyHouse.BLL.Tests.csproj", "{994D7F11-A4BC-4B20-AAAA-CD399CCBA6ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontWreckMyHouse.DAL.Tests", "..\DontWreckMyHouse.DAL.Tests\DontWreckMyHouse.DAL.Tests.csproj", "{AE1CECF1-3B03-47A4-B822-EB99CA37B9CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.DAL.Tests", "..\DontWreckMyHouse.DAL.Tests\DontWreckMyHouse.DAL.Tests.csproj", "{AE1CECF1-3B03-47A4-B822-EB99CA37B9CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DontWreckMyHouse.BLL", "..\DontWreckMyHouse.BLL\DontWreckMyHouse.BLL.csproj", "{73156E17-4F62-4A1E-ABC2-50FBD92A49C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{380BC333-FB60-441B-8ED3-8F1C4D0A16FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{380BC333-FB60-441B-8ED3-8F1C4D0A16FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{380BC333-FB60-441B-8ED3-8F1C4D0A16FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CF987FD-B25C-49F1-9ED1-32BD709F8276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CF987FD-B25C-49F1-9ED1-32BD709F8276}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CF987FD-B25C-49F1-9ED1-32BD709F8276}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CF987FD-B25C-49F1-9ED1-32BD709F8276}.Release|Any CPU.Build.0 = Release|Any CPU
 		{03F21A11-F52D-4E74-A130-3F4CEB017326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{03F21A11-F52D-4E74-A130-3F4CEB017326}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03F21A11-F52D-4E74-A130-3F4CEB017326}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{AE1CECF1-3B03-47A4-B822-EB99CA37B9CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE1CECF1-3B03-47A4-B822-EB99CA37B9CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE1CECF1-3B03-47A4-B822-EB99CA37B9CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73156E17-4F62-4A1E-ABC2-50FBD92A49C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73156E17-4F62-4A1E-ABC2-50FBD92A49C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73156E17-4F62-4A1E-ABC2-50FBD92A49C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73156E17-4F62-4A1E-ABC2-50FBD92A49C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
