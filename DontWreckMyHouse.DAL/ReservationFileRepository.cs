@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.DAL
 {
-    internal class ReservationFileRepository
+    public class ReservationFileRepository
     {
     }
 }

@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.UI
 {
-    internal class View
+    public class View
     {
+        public MainMenuOption SelectMainMenuOption()
+        {
+            DisplayHeader("Main Menu");
+            int min = int.MaxValue;
+            int max = int.MinValue;
+            MainMenuOption[] options = Enum.GetValues<MainMenuOption>();
+
+            string message = $"Select [{min}-{max - 1}]: ";
+            return options[io.ReadInt(message, min, max)];
+        }
     }
 }

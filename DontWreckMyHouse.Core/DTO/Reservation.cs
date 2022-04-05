@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.Core.DTO
 {
-    internal class Reservation
+    public class Reservation
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set; }

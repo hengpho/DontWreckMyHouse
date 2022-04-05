@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.BLL
 {
-    internal class ReservationService
+    public class ReservationService
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DontWreckMyHouse.Core.Interfaces
 {
-    internal class IReservationRepository
+    public class IReservationRepository
     {
     }
 }
