@@ -8,5 +8,6 @@ namespace DontWreckMyHouse.Core.DTO
 {
     internal class Host
     {
+        public string Id { get; set; }
     }
 }
