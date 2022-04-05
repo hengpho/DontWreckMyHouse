@@ -17,7 +17,7 @@ namespace DontWreckMyHouse.Core.DTO
         
         public decimal GetTotal()
         {
-            /*decimal weekendPrice = 0M;
+            decimal weekendPrice = 0M;
             decimal weekdayPrice = 0M;
             for (var day = StartDate.Date; day <= EndDate.Date; day = day.AddDays(1))
             {
@@ -31,8 +31,10 @@ namespace DontWreckMyHouse.Core.DTO
                 }
             }
             decimal cost = weekdayPrice + weekendPrice;
-            return cost;*/
-            throw new NotImplementedException();
+            return cost;
         }
     }
 }
+
+// Reservation reservation = (reservations id start date etc)
+// reservation.GetTotal()
