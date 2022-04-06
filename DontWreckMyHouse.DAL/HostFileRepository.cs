@@ -18,7 +18,7 @@ namespace DontWreckMyHouse.DAL
         {
             this.filePath = filePath;
         }
-        public List<Host> FindAll()
+        public List<Host> FindAllHost()
         {
             var hosts = new List<Host>();
             if (!File.Exists(filePath))
@@ -48,7 +48,8 @@ namespace DontWreckMyHouse.DAL
         }
         public Host FindByEmail(string email)
         {
-            throw new NotImplementedException();
+            var hosts = FindAllHost();
+            return hosts.FirstOrDefault(h => h.Email == email);
         }
         private Host Deserialize(string[] fields)
         {
