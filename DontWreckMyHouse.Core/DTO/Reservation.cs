@@ -9,8 +9,8 @@ namespace DontWreckMyHouse.Core.DTO
     public class Reservation
     {
         public int Id { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public Guest Guest { get; set; }
         public Host Host { get; set; }
         public decimal Total { get; set; }
@@ -19,7 +19,7 @@ namespace DontWreckMyHouse.Core.DTO
         {
             decimal weekendPrice = 0M;
             decimal weekdayPrice = 0M;
-            for (var day = StartDate.Date; day <= EndDate.Date; day = day.AddDays(1))
+            for (var day = StartDate; day <= EndDate; day = day.AddDays(1))
             {
                 if (day.DayOfWeek == DayOfWeek.Sunday || day.DayOfWeek == DayOfWeek.Saturday)
                 {

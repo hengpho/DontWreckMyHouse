@@ -43,7 +43,17 @@ namespace DontWreckMyHouse.DAL
 
         public bool Remove(Reservation reservation)
         {
-            throw new NotImplementedException();
+            List<Reservation> all = FindByHost(reservation.Host.Id);
+            for (int i = 0; i < all.Count; i++)
+            {
+                if (all[i].Id == reservation.Id)
+                {
+                    all.RemoveAt(i);
+                    Write(all, reservation.Host.Id);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<Reservation> FindByHost(string hostId)
@@ -62,7 +72,7 @@ namespace DontWreckMyHouse.DAL
             }
             catch (IOException ex)
             {
-                throw new RepositoryException("could not read forages", ex);
+                throw new RepositoryException("could not find host", ex);
             }
 
 
@@ -89,7 +99,7 @@ namespace DontWreckMyHouse.DAL
                     reservation.Id,
                     reservation.StartDate,
                     reservation.EndDate,
-                    reservation.Guest,
+                    reservation.Guest.Id, //write id of guest instead of just the guest
                     reservation.Total);
         }
 
@@ -102,8 +112,8 @@ namespace DontWreckMyHouse.DAL
 
             Reservation result = new Reservation();
             result.Id = int.Parse(fields[0]);
-            result.StartDate = DateTime.Parse(fields[1]);
-            result.EndDate = DateTime.Parse(fields[2]);
+            result.StartDate = DateOnly.Parse(fields[1]);
+            result.EndDate = DateOnly.Parse(fields[2]);
             result.Total = decimal.Parse(fields[4]);
 
             Guest guest = new Guest();
