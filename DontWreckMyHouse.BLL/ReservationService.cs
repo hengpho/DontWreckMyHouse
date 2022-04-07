@@ -27,6 +27,12 @@ namespace DontWreckMyHouse.BLL
         public Host FindByHostEmail(string email){
             return hostRepository.FindByEmail(email);
         }
+        public List<Host> FindByHostLastName(string prefix)
+        {
+            return hostRepository.FindAllHost()
+                .Where(h => h.LastName.StartsWith(prefix))
+                .ToList();
+        }
         public List<Guest> FindAllGuest()
         {
             return guestRepository.FindAllGuest();
@@ -34,6 +40,12 @@ namespace DontWreckMyHouse.BLL
         public Guest FindByGuestEmail(string email)
         {
             return guestRepository.FindByEmail(email);
+        }
+        public List<Guest> FindByGuestLastName(string prefix)
+        {
+            return guestRepository.FindAllGuest()
+                .Where(g => g.LastName.StartsWith(prefix))
+                .ToList();
         }
         public List<Reservation> FindAllReservation(string hostId) //Find all Info within Hostfile
         {
@@ -50,11 +62,17 @@ namespace DontWreckMyHouse.BLL
             }
             return result;         
         }
-        public Reservation AddReservation(Reservation reservation) 
+                    //Back to ui                        to DAL
+        public Result<Reservation> AddReservation(Reservation reservation)
         {
-            //No Duplicate Reservation
-            //
-            return reservationRepository.AddReservation(reservation);
+            Result<Reservation> result = Validate(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+            result.Value = reservationRepository.AddReservation(reservation);
+
+            return result;
         }
         public bool Update(Reservation reservation)
         {
@@ -64,9 +82,85 @@ namespace DontWreckMyHouse.BLL
         {
             return reservationRepository.Remove(reservation);
         }
+        private Result<Reservation> Validate(Reservation reservation)
+        {
+            Result<Reservation> result = ValidateNulls(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            ValidateFields(reservation, result);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            ValidateChildrenExist(reservation, result);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            List<Reservation> reservations = reservationRepository.FindByHost(reservation.Host.Id);
+            var currentReservation = reservations.FirstOrDefault(
+                x => (x.StartDate <= reservation.StartDate && x.EndDate >= reservation.StartDate)
+                || (x.StartDate <= reservation.EndDate && x.EndDate >= reservation.EndDate));
+
+            if (currentReservation != null)
+            {
+                result.AddMessage($"Reservation dates overlap with reservation {currentReservation.Id}, {currentReservation.StartDate} - {currentReservation.EndDate}");
+                return result;
+            }
+
+            return result;
+        }
+
+        private Result<Reservation> ValidateNulls(Reservation reservation)
+        {
+            Result<Reservation> result = new Result<Reservation>();
+            if (reservation == null)
+            {
+                result.AddMessage("Reservation is null.");
+                return result;
+            }
+            if (reservation.Host == null)
+            {
+                result.AddMessage("Host is null.");
+                return result;
+            }
+            if (reservation.Guest == null)
+            {
+                result.AddMessage("Guest is null.");
+                return result;
+            }
+            return result;
+        }
+        private void ValidateFields(Reservation reservation, Result<Reservation> result)
+        {
+            if ( reservation.StartDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                result.AddMessage("Date cannot be in the past.");
+            }
+            if (reservation.EndDate < reservation.StartDate)
+            {
+                result.AddMessage("End date cannot be before start date.");
+            }
+        }
+
+        private void ValidateChildrenExist(Reservation reservation, Result<Reservation> result)
+        {
+            if (reservation.Host.Id == null
+                    || hostRepository.FindByEmail(reservation.Host.Email) == null)
+            {
+                result.AddMessage("Host does not exist.");
+            }
+
+            if (reservation.Host.Id == null
+                    || guestRepository.FindByEmail(reservation.Guest.Email) == null)
+            {
+                result.AddMessage("Guest does not exist.");
+            }
+        }
     }
 }
-
-//getall.where x.startdate > DateTime.Now ?Done in view? maybe
-
-//When adding reservation, only show future open dates. So dates that are not already on the list.

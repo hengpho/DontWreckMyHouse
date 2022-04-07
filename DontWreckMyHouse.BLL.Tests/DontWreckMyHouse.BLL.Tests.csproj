@@ -19,8 +19,4 @@
     <ProjectReference Include="..\DontWreckMyHouse.Core\DontWreckMyHouse.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestDouble\" />
-  </ItemGroup>
-
 </Project>
