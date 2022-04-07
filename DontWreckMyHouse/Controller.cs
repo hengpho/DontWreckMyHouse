@@ -49,18 +49,16 @@ namespace DontWreckMyHouse.UI
                         Console.WriteLine("EditReservation");
                         break;
                     case MainMenuOption.CancelReservation:
-                        Console.WriteLine("CancelReservation");
+                        CancleReservation();
                         break;
                 }
             } while(option != MainMenuOption.Exit);
         }
 
         private void ViewReservation()
-        { //swhettletoncj@google.pl -- Testing Email 
-            view.DisplayHeader(MainMenuOption.ViewReservation.ToLabel());
-            string email = view.GetHostEmail();
-            Host hostEmail = reservationService.FindByHostEmail(email);
-            List<Reservation> reservations = reservationService.FindAllReservation(hostEmail.Id);
+        { 
+            var host = GetHost();
+            List<Reservation> reservations = reservationService.FindAllReservation(host.Id);
             view.DisplayReservations4Host(reservations);
             view.EnterToContinue();
         }
@@ -114,17 +112,55 @@ namespace DontWreckMyHouse.UI
             List<Guest> allGuest = reservationService.FindByGuestLastName(LastNamePrefix);
             return view.ChooseGuests(allGuest);
         }
-        private void AddReservation()
-        {
-
-        }
         private void EditReservation()
         {
+            view.DisplayHeader(MainMenuOption.EditReservation.ToLabel());
+            Host host = GetHost();
+            if (host == null)
+            {
+                return;
+            }
+            Guest guest = GetGuest();
+            if (guest == null)
+            {
+                return;
+            }
 
         }
         private void CancleReservation()
         {
-
+            view.DisplayHeader(MainMenuOption.CancelReservation.ToLabel());
+            Host host = GetHost();
+            List<Reservation> reservations = reservationService.FindAllReservation(host.Id);
+            if (!view.DisplayReservations4Host(reservations))
+            {
+                return;
+            }
+            Guest guest = GetGuest();
+            if (guest == null)
+            {
+                return;
+            }
+            view.DisplayHeader($"Displaying all reservations for {host.LastName} - {host.Email}");
+            if (view.DisplayFutureReservations(reservations))
+            {
+                Reservation reservation = view.DeleteReservation(host, guest);
+                bool result = reservationService.Delete(reservation);
+                if (!result)
+                {
+                    string failMessage = $"Reservation could not be found";
+                    view.DisplayStatus(false, failMessage);
+                }
+                else
+                {
+                    string successMessage = $"Reservation {reservation.Id} cancelled.";
+                    view.DisplayStatus(true, successMessage);
+                }
+            }
+            else
+            {
+                return;
+            }
         }
 
     } 

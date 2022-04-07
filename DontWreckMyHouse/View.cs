@@ -72,12 +72,12 @@ namespace DontWreckMyHouse.UI
             io.ReadString("Press [Enter] to continue.");
         }
 
-        public void DisplayReservations4Host(List<Reservation> reservations)
+        public bool DisplayReservations4Host(List<Reservation> reservations)
         {
             if (reservations == null || reservations.Count == 0)
             {
                 io.PrintLine("Host has no reservations.");
-                return;
+                return false;
             }
 
             var orderedReservations = reservations.OrderBy(r => r.StartDate);
@@ -92,6 +92,7 @@ namespace DontWreckMyHouse.UI
                         reservation.Guest.LastName,
                         reservation.Guest.Email));
             }
+            return true;
         }
         public void DisplayReservations(List<Reservation> reservations)
         {
@@ -110,7 +111,45 @@ namespace DontWreckMyHouse.UI
                         reservation.EndDate));
             }
         }
-
+        public bool DisplayFutureReservations(List<Reservation> reservations)  //Switch this over to BLL, View should not be returning anything
+        {
+            if (reservations == null || reservations.Count == 0)
+            {
+                io.PrintLine("Host has no reservations.");
+                return false;
+            }
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            var orderedReservations = reservations
+                .Where(r => r.StartDate > today)
+                .OrderBy(r => r.StartDate);
+            bool hasDates = orderedReservations.Any();
+            if (!hasDates)
+            {
+                io.PrintLine("No Future reservation to be removed");
+                return false;
+            }
+            foreach (Reservation reservation in orderedReservations)
+            {
+                io.PrintLine(
+                    string.Format("ID: {0} - From [{1} - {2}] Name: {3} {4}, Location: {5},{6}",
+                        reservation.Id,
+                        reservation.StartDate,
+                        reservation.EndDate,
+                        reservation.Guest.FirstName,
+                        reservation.Guest.LastName,
+                        reservation.Host.City,
+                        reservation.Host.State));
+            }
+            return true;
+        }
+        public Reservation DeleteReservation(Host host, Guest guest)
+        {
+            Reservation reservation = new Reservation();
+            reservation.Guest = guest;
+            reservation.Host = host;
+            reservation.Id = io.ReadInt("Enter the reservation ID to cancel: ");
+            return reservation;
+        }
         public bool DisplayTotalPrompt(Result<Reservation> result)
         {
             DisplayHeader("Summary");
@@ -171,7 +210,6 @@ namespace DontWreckMyHouse.UI
 
             return reservation;
         }
-
         public Guest ChooseGuests(List<Guest> allGuest)
         {
             if (allGuest == null || allGuest.Count == 0)
