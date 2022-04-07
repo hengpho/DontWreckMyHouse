@@ -1,4 +1,5 @@
-﻿using DontWreckMyHouse.Core.DTO;
+﻿using DontWreckMyHouse.BLL;
+using DontWreckMyHouse.Core.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,6 +109,26 @@ namespace DontWreckMyHouse.UI
                         reservation.StartDate,
                         reservation.EndDate));
             }
+        }
+
+        public bool DisplayTotalPrompt(Result<Reservation> result)
+        {
+            DisplayHeader("Summary");
+                io.PrintLine(
+                    string.Format("Start: {0}\nEnd {1}\nTotal: {2:C2}",
+                        result.Value.StartDate,
+                        result.Value.EndDate,
+                        result.Value.Total));
+
+            if(io.ReadBool("Is this Okay? [y/n]: "))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public Host ChooseHosts(List<Host> allHost)

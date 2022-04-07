@@ -81,15 +81,24 @@ namespace DontWreckMyHouse.UI
             view.DisplayHeader($"Displaying all reservations for {host.LastName} - {host.Email}");
             view.DisplayReservations(reservations);
             Reservation reservation = view.MakeReservation(host, guest);
-            Result<Reservation> result = reservationService.AddReservation(reservation);
+            Result<Reservation> result = reservationService.MakeReservation(reservation);
             if (!result.Success)
             {
                 view.DisplayStatus(false, result.Messages);
             }
             else
             {
-                string successMessage = $"Reservation {result.Value.Id} created.";
-                view.DisplayStatus(true, successMessage);
+                if (view.DisplayTotalPrompt(result))
+                {
+                    Result<Reservation> resultToAdd = reservationService.AddReservation(reservation);
+                    string successMessage = $"Reservation {resultToAdd.Value.Id} created.";
+                    view.DisplayStatus(true, successMessage);
+                }
+                else
+                {
+                    return;
+                }
+                
             }
         }
         private Host GetHost()

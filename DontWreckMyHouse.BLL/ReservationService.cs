@@ -65,13 +65,19 @@ namespace DontWreckMyHouse.BLL
                     //Back to ui                        to DAL
         public Result<Reservation> AddReservation(Reservation reservation)
         {
+            Result<Reservation> result = new();
+            result.Value = reservationRepository.AddReservation(reservation);
+            return result;
+        }
+        public Result<Reservation> MakeReservation(Reservation reservation)
+        {
             Result<Reservation> result = Validate(reservation);
             if (!result.Success)
             {
                 return result;
             }
-            result.Value = reservationRepository.AddReservation(reservation);
-
+            reservation.Total = reservation.GetTotal();
+            result.Value = reservation;
             return result;
         }
         public bool Update(Reservation reservation)
