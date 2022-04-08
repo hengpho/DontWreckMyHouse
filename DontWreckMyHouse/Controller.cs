@@ -46,7 +46,7 @@ namespace DontWreckMyHouse.UI
                         MakeReservation();
                         break;
                     case MainMenuOption.EditReservation:
-                        Console.WriteLine("EditReservation");
+                        EditReservation();
                         break;
                     case MainMenuOption.CancelReservation:
                         CancleReservation();
@@ -116,12 +116,55 @@ namespace DontWreckMyHouse.UI
         {
             view.DisplayHeader(MainMenuOption.EditReservation.ToLabel());
             Host host = GetHost();
-            if (host == null)
+            List<Reservation> reservations = reservationService.FindAllReservation(host.Id);
+            if (!view.DisplayReservations4Host(reservations))
             {
                 return;
             }
             Guest guest = GetGuest();
             if (guest == null)
+            {
+                return;
+            }
+            view.DisplayHeader($"Displaying all reservations for {host.LastName} - {host.Email}");
+            if (view.DisplayFutureReservations(reservations))
+            {
+                Reservation reservationIdFromUser = view.GetReservationId();
+                Result<Reservation> reservationId = reservationService.GetReservationID(reservations, reservationIdFromUser.Id);
+                if (!reservationId.Success)
+                {
+                    view.DisplayStatus(false, reservationId.Messages);
+                    return;
+                }
+                Reservation reservation = view.UpdateReservation(host, guest, reservationId.Value);
+                Result<Reservation> result = reservationService.CheckB4Update(reservation);
+                if (!result.Success)
+                {
+                    view.DisplayStatus(false, result.Messages);
+                }
+                else
+                {
+                    if (view.DisplayTotalPrompt(result))
+                    {
+                        bool output = reservationService.Update(reservation);
+                        if (!output)
+                        {
+                            string failMessage = $"Reservation could not be found";
+                            view.DisplayStatus(false, failMessage);
+                        }
+                        else
+                        {
+                            string successMessage = $"Reservation {reservation.Id} Updated.";
+                            view.DisplayStatus(true, successMessage);
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }      
+            }
+            else
             {
                 return;
             }

@@ -150,6 +150,32 @@ namespace DontWreckMyHouse.UI
             reservation.Id = io.ReadInt("Enter the reservation ID to cancel: ");
             return reservation;
         }
+        public Reservation GetReservationId()
+        {
+            Reservation reservation = new Reservation();
+            reservation.Id = io.ReadInt("Enter the reservation ID to Update: ");
+            return reservation;
+        }
+        public Reservation UpdateReservation(Host host, Guest guest, Reservation reservationId)
+        {
+            Reservation reservation = new Reservation();
+            reservation.Guest = guest;
+            reservation.Host = host;
+            reservation.Id = reservationId.Id;
+            reservation.StartDate = reservationId.StartDate;
+            reservation.EndDate = reservationId.EndDate;
+            string startDate = io.ReadString($"Enter Start Date (mm/dd/yyyy) {reservationId.StartDate}: ");
+            string endDate = io.ReadString($"Enter End Date (mm/dd/yyyy) {reservationId.EndDate}: ");
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                reservation.StartDate = DateOnly.Parse(startDate);
+            }
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                reservation.EndDate = DateOnly.Parse(endDate);
+            }
+            return reservation;
+        }
         public bool DisplayTotalPrompt(Result<Reservation> result)
         {
             DisplayHeader("Summary");

@@ -80,6 +80,17 @@ namespace DontWreckMyHouse.BLL
             result.Value = reservation;
             return result;
         }
+        public Result<Reservation> CheckB4Update(Reservation reservation)
+        {
+            Result<Reservation> result = Validate(reservation);
+            if (!result.Success)
+            {
+                return result;
+            }
+            reservation.Total = reservation.GetTotal();
+            result.Value = reservation;
+            return result;
+        }
         public bool Update(Reservation reservation)
         {
             return reservationRepository.Update(reservation);
@@ -87,6 +98,23 @@ namespace DontWreckMyHouse.BLL
         public bool Delete(Reservation reservation)
         {
             return reservationRepository.Remove(reservation);
+        }
+        public List<Reservation> GetByHostIdGuestId(string hostId, int guestId)
+        {
+            List<Reservation> reservations = reservationRepository.FindByHost(hostId);
+            List<Reservation> guest = reservations.Where(r => r.Guest.Id == guestId).ToList();
+            return guest;
+        }
+        public Result<Reservation> GetReservationID(List<Reservation> reservations, int reservationId)
+        {
+            Result<Reservation> result = new Result<Reservation>();
+            Reservation reservation = reservations.FirstOrDefault(x => x.Id == reservationId);
+            if (reservation == null)
+            {
+                result.AddMessage($"Reservation with id {reservationId} does not exist.");
+            }
+            result.Value = reservation;
+            return result;
         }
         private Result<Reservation> Validate(Reservation reservation)
         {
@@ -109,7 +137,9 @@ namespace DontWreckMyHouse.BLL
             }
 
             List<Reservation> reservations = reservationRepository.FindByHost(reservation.Host.Id);
-            var currentReservation = reservations.FirstOrDefault(
+            var toBeChangedReservation = reservations.Where(x => x.Id != reservation.Id);
+
+            var currentReservation = toBeChangedReservation.FirstOrDefault(
                 x => (x.StartDate <= reservation.StartDate && x.EndDate >= reservation.StartDate)
                 || (x.StartDate <= reservation.EndDate && x.EndDate >= reservation.EndDate));
 
