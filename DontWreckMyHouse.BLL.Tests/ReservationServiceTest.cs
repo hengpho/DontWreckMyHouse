@@ -45,7 +45,7 @@ namespace DontWreckMyHouse.BLL.Tests
             Assert.IsFalse(result.Success);
         }
         [Test]
-        public void ShouldBeAbleToUpdateAfterCheck()
+        public void ShouldBeAbleToValidateBeforeUpdating()
         {
             Reservation reservation = new Reservation();
             reservation.Guest = GuestRepositoryDouble.GUEST;
@@ -58,6 +58,21 @@ namespace DontWreckMyHouse.BLL.Tests
 
             Assert.IsTrue(result.Success);
             Assert.AreEqual(500, result.Value.Total);
+        }
+        [Test]
+        public void ShouldNotBeAbleToUpdate()
+        {
+            Reservation reservation = new Reservation();
+            reservation.Guest = GuestRepositoryDouble.GUEST;
+            reservation.Host = HostRepositoryDouble.HOST;
+            reservation.StartDate = new DateOnly(2022, 04, 11);
+            reservation.EndDate = new DateOnly(2022, 04, 15);
+            reservation.Total = 500;
+            reservation.Id = 6;
+
+            bool result = service.Update(reservation);
+
+            Assert.IsFalse(result);
         }
     }
 }
